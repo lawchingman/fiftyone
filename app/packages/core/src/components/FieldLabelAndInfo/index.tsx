@@ -96,12 +96,12 @@ function toLabel(path, nested) {
 const FieldInfoIcon = (props) => <InfoIcon {...props} style={{ opacity: 1 }} />;
 
 type FieldLabelAndInfo = {
-  nested?: boolean 
-  field: Field
-  color: string
-  expandedPath?: string 
-  template: (unknown) => JSX.Element
-}
+  nested?: boolean;
+  field: Field;
+  color: string;
+  expandedPath?: string;
+  template: (unknown) => JSX.Element;
+};
 
 const FieldLabelAndInfo = ({
   nested,
@@ -111,15 +111,16 @@ const FieldLabelAndInfo = ({
   template,
 }: FieldLabelAndInfo) => {
   const fieldInfo = useFieldInfo(field, nested, { expandedPath, color });
+
   return (
     <>
       {template({ ...fieldInfo, FieldInfoIcon })}
       {fieldInfo.open && <FieldInfoExpanded {...fieldInfo} />}
     </>
   );
-}
+};
 
-export default FieldLabelAndInfo
+export default FieldLabelAndInfo;
 
 const FieldInfoExpandedContainer = styled.div`
   background: ${({ theme }) => {
