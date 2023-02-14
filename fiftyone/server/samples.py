@@ -44,7 +44,7 @@ class ImageSample(Sample):
 
 @gql.type
 class PointCloudSample(Sample):
-    pass
+    aspect_ratio: float
 
 
 @gql.type
