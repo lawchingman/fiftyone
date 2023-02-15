@@ -1,6 +1,7 @@
 import { EnumType } from "typescript";
 import SpaceNode from "./SpaceNode";
 import { Layout } from "./enums";
+import { RecoilState } from "recoil";
 
 export type SpacesRootProps = {
   id: string;
@@ -73,4 +74,18 @@ export type PanelsStateObject = {
 
 export type PanelsCloseEffect = {
   [panelId: string]: () => void;
+};
+
+export type PanelsFilterStatHandler = {
+  [panelId: string]: () => void;
+};
+
+export type PanelFilterStat = {
+  caption?: string;
+  title?: string;
+};
+
+export type CommonPartialSelectorType = {
+  recoilState: RecoilState<Map<string, any>>;
+  key: string;
 };

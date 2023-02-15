@@ -15,13 +15,16 @@ const PillButton = React.forwardRef<HTMLButtonElement, PillButtonProps>(
       arrow = false,
       style,
       title,
+      active,
     } = props;
     const theme = useTheme();
     const baseStyles = useSpring({
-      backgroundColor: !highlight
-        ? theme.background.button
-        : theme.primary.plainColor,
-      color: !highlight ? theme.text.secondary : theme.text.buttonHighlight,
+      backgroundColor: active
+        ? theme.primary.plainColor
+        : highlight
+        ? theme.primary.plainColorOpaque
+        : theme.background.button,
+      color: active ? theme.text.buttonHighlight : theme.text.secondary,
     });
 
     const children = (
@@ -54,6 +57,7 @@ type PillButtonProps = {
   arrow?: boolean;
   style?: React.CSSProperties;
   title: string;
+  active?: boolean;
 };
 
 const PillButtonDiv = animated(styled.div`

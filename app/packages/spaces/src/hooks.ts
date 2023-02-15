@@ -19,9 +19,13 @@ import {
   panelTitlesState,
   previousTabsGroupAtom,
   spaceSelector,
+  panelsFilterStatsState,
+  commonMapPartialSelector,
+  panelsFilterStatHandler,
 } from "./state";
 import {
   PanelsCloseEffect,
+  PanelFilterStat,
   PanelsStateObject,
   SpaceNodeJSON,
   SpaceNodeType,
@@ -274,5 +278,51 @@ export function usePanelCloseEffect(panelId?: string) {
       delete panelsCloseEffect[computedPanelId];
       panelCloseEffect();
     }
+  };
+}
+
+/**
+ * Get and set filter stats of a panel
+ *
+ * Note: `id` is optional if hook is used within the component of a panel.
+ */
+export function usePanelFilterStats(
+  id?: string
+): [PanelFilterStat | undefined, (stats: PanelFilterStat) => void, () => void] {
+  const panelContext = useContext(PanelContext);
+  const panelId = (id || panelContext?.node?.id) as string;
+  const [panelFilterStats, setPanelFilterStats] = useRecoilState(
+    commonMapPartialSelector({
+      key: panelId,
+      recoilState: panelsFilterStatsState,
+    })
+  );
+
+  function handler() {
+    const panelStatHandler = panelsFilterStatHandler[panelId];
+    if (typeof panelStatHandler === "function") panelStatHandler();
+  }
+
+  return [panelFilterStats, setPanelFilterStats, handler];
+}
+
+/**
+ * Get a set for filter stats of a panel
+ *
+ * Note: `id` is optional if hook is used within the component of a panel.
+ */
+export function useSetPanelFilterStats(id?: string) {
+  const panelContext = useContext(PanelContext);
+  const panelId = (id || panelContext?.node?.id) as string;
+  const setPanelFilterStats = useSetRecoilState(
+    commonMapPartialSelector({
+      key: panelId,
+      recoilState: panelsFilterStatsState,
+    })
+  );
+
+  return (filterStats: PanelFilterStat, handler?: () => void) => {
+    setPanelFilterStats(filterStats);
+    if (handler) panelsFilterStatHandler[panelId] = handler;
   };
 }

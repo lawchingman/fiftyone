@@ -77,7 +77,8 @@ const Patches = () => {
         icon={loading ? <Loading /> : <FlipToBack />}
         open={open}
         onClick={() => !loading && setOpen(!open)}
-        highlight={open || Boolean(fields.length)}
+        active={open}
+        highlight={Boolean(fields.length)}
         title={isVideo ? "Clips" : "Patches"}
         style={{ cursor: loading ? "default" : "pointer" }}
       />
@@ -121,6 +122,7 @@ const Similarity = ({ modal }: { modal: boolean }) => {
         open={open}
         onClick={() => setOpen(!open)}
         highlight={true}
+        active={open}
         ref={mRef}
         title={"Sort by similarity"}
         style={{ cursor: "pointer" }}
@@ -170,7 +172,8 @@ const Tag = ({
         icon={disabled ? <Loading /> : <LocalOffer />}
         open={open}
         onClick={() => !disabled && available && setOpen(!open)}
-        highlight={(selected || open) && available}
+        highlight={selected && available}
+        active={open}
         ref={mRef}
         title={`Tag sample${modal ? "" : "s"} or labels`}
       />
@@ -230,7 +233,8 @@ const Selected = ({
           }
           setOpen(!open);
         }}
-        highlight={samples.size > 0 || open || (labels.size > 0 && modal)}
+        highlight={samples.size > 0 || (labels.size > 0 && modal)}
+        active={open}
         text={text}
         ref={mRef}
         title={`Manage selected`}
@@ -262,7 +266,7 @@ const Options = ({ modal }) => {
         icon={<Settings />}
         open={open}
         onClick={() => setOpen(!open)}
-        highlight={open}
+        active={open}
         ref={mRef}
         title={"Display options"}
       />

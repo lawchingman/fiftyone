@@ -1,7 +1,11 @@
 import { useRef, Fragment, useEffect } from "react";
 import { useExternalLink } from "@fiftyone/utilities";
 import { Loading, Selector, useTheme } from "@fiftyone/components";
-import { usePanelStatePartial, useSetPanelCloseEffect } from "@fiftyone/spaces";
+import {
+  usePanelStatePartial,
+  useSetPanelCloseEffect,
+  useSetPanelFilterStats,
+} from "@fiftyone/spaces";
 import {
   HighlightAlt,
   Close,
@@ -45,12 +49,21 @@ export default function Embeddings({ containerHeight, dimensions }) {
   );
   const warnings = useWarnings();
   const setPanelCloseEffect = useSetPanelCloseEffect();
+  const setPanelFilterStat = useSetPanelFilterStats();
 
   useEffect(() => {
     setPanelCloseEffect(() => {
       plotSelection.clearSelection();
     });
   }, []);
+
+  useEffect(() => {
+    const count = plotSelection.resolvedSelection?.length;
+    setPanelFilterStat(
+      count ? { caption: count, title: "Clear selection" } : null,
+      plotSelection.clearSelection
+    );
+  }, [plotSelection]);
 
   const selectorStyle = {
     background: theme.neutral.softBg,

@@ -1,9 +1,12 @@
 import { atom, selectorFamily } from "recoil";
 import {
   PanelsCloseEffect,
+  PanelFilterStat,
   PanelStateParameter,
   PanelStatePartialParameter,
   SpaceNodeJSON,
+  PanelsFilterStatHandler,
+  CommonPartialSelectorType,
 } from "./types";
 
 // a react hook for managing the state of all spaces in the app
@@ -89,6 +92,32 @@ export const previousTabsGroupAtom = atom<HTMLElement | null>({
 });
 
 export const panelsCloseEffect: PanelsCloseEffect = {};
+
+export const panelsFilterStatsState = atom<Map<string, PanelFilterStat>>({
+  key: "panelsFilterStats",
+  default: new Map(),
+});
+
+export const panelsFilterStatHandler: PanelsFilterStatHandler = {};
+
+export const commonMapPartialSelector = selectorFamily({
+  key: "commonMapPartialSelector",
+  get:
+    (params: CommonPartialSelectorType) =>
+    ({ get }) => {
+      const { recoilState, key } = params;
+      const state = get(recoilState);
+      return state.get(key);
+    },
+  set:
+    (params: CommonPartialSelectorType) =>
+    ({ get, set }, newValue) => {
+      const { recoilState, key } = params;
+      const updatedState = new Map(get(recoilState));
+      updatedState.set(key, newValue);
+      set(recoilState, updatedState);
+    },
+});
 
 function getStateAtom(local?: boolean) {
   return local ? panelsLocalStateAtom : panelsStateAtom;
