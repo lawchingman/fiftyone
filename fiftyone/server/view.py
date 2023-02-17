@@ -157,18 +157,20 @@ def get_extended_view(
     filtered_labels = set()
 
     label_tags = None
+    sample_tags = None
     if filters is not None and len(filters):
         if "tags" in filters:
             tags = filters.get("tags")
-            if "label" in tags:
-                label_tags = tags["label"]
+            tags = tags["values"]
+            print("tags", tags)
+            if tags:
+                view = view.match_tags(tags)
 
+        if "_label_tags" in filters:
+            label_tags = filters.get("_label_tags")
+            label_tags = label_tags["values"]
             if not count_label_tags and label_tags:
                 view = view.select_labels(tags=label_tags)
-
-            if "sample" in tags:
-                view = view.match_tags(tags=tags["sample"])
-
         stages, cleanup_fields, filtered_labels = _make_filter_stages(
             view,
             filters,
